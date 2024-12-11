@@ -13,10 +13,19 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from environ import Env 
-
+import psycopg2
 import dj_database_url
 
-import os
+import os 
+
+connection = psycopg2.connect(
+    database=os.getenv("POSTGRES_DB"),
+    user=os.getenv("PGUSER"),
+    password=os.getenv("POSTGRES_PASSWORD"),
+    host=os.getenv("PGHOST"),
+    port="5432"
+)
+print("Connection successful!") 
 
 env = Env() 
 Env.read_env() 
