@@ -12,12 +12,16 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
-import environ
+from environ import Env 
+
 import dj_database_url
 
-# Initialise environment variables
-env = environ.Env()
-environ.Env.read_env()
+import os
+
+env = Env() 
+Env.read_env() 
+
+ENVIRONMENT = env('ENVIRONMENT') # default='production' 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,9 +34,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env('SECRET_KEY') 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+if ENVIRONMENT == 'development':
+    DEBUG = True
+else:
+    DEBUG = False 
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*'] 
+
 
 
 # Application definition
@@ -84,25 +92,21 @@ WSGI_APPLICATION = 'Twitter.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-
-   'default': {
-
+    'default': {
         'ENGINE': 'django.db.backends.postgresql',
-
-        'NAME': env('PGDATABASE'),
-
-        'USER': env('PGUSER'),
-
-        'PASSWORD': env('PGPASSWORD'),
-
-        'HOST': env('PGHOST'),
-
-        'PORT': env('PGPORT'),
-
+        'NAME': os.getenv('POSTGRES_DB'),
+        'USER': os.getenv('PGUSER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'HOST': os.getenv('PGHOST', 'postgres.railway.internal'), 
+        'PORT': '5432',
     }
 }
 
-DATABASES['default'] = {**dj_database_url.config(default=os.getenv('DATABASE_URL', ''), conn_max_age=600, ssl_require=True)}
+POSTGRES_LOCALLY = False
+
+
+if ENVIRONMENT == "production" or POSTGRES_LOCALLY == True: 
+    DATABASES['default'] = {**dj_database_url.parse(env('DATABASE_PUBLIC_URL'))} 
 
 
 # Password validation
