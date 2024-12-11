@@ -1,19 +1,13 @@
 {
-  "version": 2,
-  "builds": [
-    {
+    "builds": [{
       "src": "Twitter/wsgi.py",
       "use": "@vercel/python",
-      "config": {
-        "maxLambdaSize": "15mb",
-        "runtime": "python3.12"
+      "config": { "maxLambdaSize": "15mb", "runtime": "Python 3.12.7" } 
+    }],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "Twitter/wsgi.py"
       }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "Twitter/wsgi.py"
-    }
-  ]
+    ]
 }
