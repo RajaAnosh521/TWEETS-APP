@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tweet',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -62,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -107,6 +109,9 @@ POSTGRES_LOCALLY = False
 if ENVIRONMENT == "production" or POSTGRES_LOCALLY == True: 
     DATABASES['default'] = {**dj_database_url.config(default=env('DATABASE_PUBLIC_URL'))} 
   
+CORS_ALLOWED_ORIGINS = [
+    'https://tweets-app-production.up.railway.app',
+]
 
 
 # Password validation
