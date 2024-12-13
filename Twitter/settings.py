@@ -97,10 +97,10 @@ WSGI_APPLICATION = 'Twitter.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB'),
-        'USER': os.getenv('PGUSER'),
+        'NAME': 'railway',
+        'USER': 'postgres',
         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': os.getenv('PGHOST', 'postgres.railway.internal'), 
+        'HOST': 'postgres.railway.internal',
         'PORT': '5432',
     }
 }
@@ -108,7 +108,9 @@ DATABASES = {
 POSTGRES_LOCALLY = False
 
 if ENVIRONMENT == "production" or POSTGRES_LOCALLY == True: 
-    DATABASES['default'] = {**dj_database_url.config(default=env('DATABASE_PUBLIC_URL'))} 
+    DATABASES = {
+    'default': dj_database_url.config(default=os.getenv('POSTGRES_DATABASE_URL'), conn_max_age=1800)
+    }
   
 CORS_ALLOWED_ORIGINS = [
     'https://tweets-app-production.up.railway.app',

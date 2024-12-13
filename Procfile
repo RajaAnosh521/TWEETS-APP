@@ -1,1 +1,1 @@
-web: gunicorn Twitter.wsgi --bind 0.0.0.0:$PORT
+gunicorn Twitter.wsgi:application --workers 3 --bind 0.0.0.0:8080
