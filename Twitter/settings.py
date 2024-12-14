@@ -39,9 +39,9 @@ if ENVIRONMENT == 'development':
 else:
     DEBUG = False 
 
-ALLOWED_HOSTS = ['*'] 
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'tweets-app-production.up.railway.app']  
 
-
+CSRF_TRUSTED_ORIGINS = ['https://tweets-app-production.up.railway.app'] 
 
 # Application definition
 
@@ -111,10 +111,6 @@ if ENVIRONMENT == "production" or POSTGRES_LOCALLY == True:
     DATABASES = {
     'default': dj_database_url.config(default=os.getenv('POSTGRES_DATABASE_URL'), conn_max_age=1800)
     }
-  
-CORS_ALLOWED_ORIGINS = [
-    'https://tweets-app-production.up.railway.app',
-]
 
 
 # Password validation
