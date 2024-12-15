@@ -12,47 +12,25 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
-import psycopg2
 from dotenv import load_dotenv
 import os
-import dj_database_url
 
-# Load environment variables from .env
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env file
 load_dotenv()
 
-# Fetch variables
-USER = os.getenv("user")
-PASSWORD = os.getenv("password")
-HOST = os.getenv("host")
-PORT = os.getenv("port")
-DBNAME = os.getenv("dbname")
+# # Debug: Print the environment variables to confirm
+# print(f"POSTGRES_USER: {os.getenv('POSTGRES_USER')}")
+# print(f"POSTGRES_PASSWORD: {os.getenv('POSTGRES_PASSWORD')}")
+# print(f"POSTGRES_HOST: {os.getenv('POSTGRES_HOST')}")
+# print(f"POSTGRES_PORT: {os.getenv('POSTGRES_PORT')}")
+# print(f"POSTGRES_DB: {os.getenv('POSTGRES_DB')}")
 
-# Connect to the database
-try:
-    connection = psycopg2.connect(
-        user=USER,
-        password=PASSWORD,
-        host=HOST,
-        port=PORT,
-        dbname=DBNAME
-    )
-    print("Connection successful!")
-    
-    # Create a cursor to execute SQL queries
-    cursor = connection.cursor()
-    
-    # Example query
-    cursor.execute("SELECT NOW();")
-    result = cursor.fetchone()
-    print("Current Time:", result)
 
-    # Close the cursor and connection
-    cursor.close()
-    connection.close()
-    print("Connection closed.")
-
-except Exception as e:
-    print(f"Failed to connect: {e}")
+# Load environment variables from .env
+load_dotenv()   
 
 ENVIRONMENT = os.getenv('ENVIRONMENT') # default='production' 
 
@@ -127,23 +105,17 @@ WSGI_APPLICATION = 'Twitter.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.getenv('POSTGRES_DB'),
-#         'USER': os.getenv('POSTGRES_USER'),
-#         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-#         'HOST': os.getenv('PGHOST'),
-#         'PORT': os.getenv('PGPORT'),
-#     }
-# }
-
-POSTGRES_LOCALLY = False 
-
-if ENVIRONMENT == "production" or POSTGRES_LOCALLY == True: 
-    DATABASES = {
-    'default': {**dj_database_url.config(ssl_require=True, conn_max_age=1800)} 
+# Database Configuration
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('POSTGRES_DB'),
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'HOST': os.getenv('POSTGRES_HOST'),
+        'PORT': os.getenv('POSTGRES_PORT'),
     }
+}
 
 
 # Password validation
