@@ -12,16 +12,49 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
-from environ import Env 
-
+import psycopg2
+from dotenv import load_dotenv
+import os
 import dj_database_url
 
-import os 
+# Load environment variables from .env
+load_dotenv()
 
-env = Env() 
-Env.read_env() 
+# Fetch variables
+USER = os.getenv("user")
+PASSWORD = os.getenv("password")
+HOST = os.getenv("host")
+PORT = os.getenv("port")
+DBNAME = os.getenv("dbname")
 
-ENVIRONMENT = env('ENVIRONMENT') # default='production' 
+# Connect to the database
+try:
+    connection = psycopg2.connect(
+        user=USER,
+        password=PASSWORD,
+        host=HOST,
+        port=PORT,
+        dbname=DBNAME
+    )
+    print("Connection successful!")
+    
+    # Create a cursor to execute SQL queries
+    cursor = connection.cursor()
+    
+    # Example query
+    cursor.execute("SELECT NOW();")
+    result = cursor.fetchone()
+    print("Current Time:", result)
+
+    # Close the cursor and connection
+    cursor.close()
+    connection.close()
+    print("Connection closed.")
+
+except Exception as e:
+    print(f"Failed to connect: {e}")
+
+ENVIRONMENT = os.getenv('ENVIRONMENT') # default='production' 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -94,22 +127,22 @@ WSGI_APPLICATION = 'Twitter.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB'),
-        'USER': os.getenv('POSTGRES_USER'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': os.getenv('PGHOST'),
-        'PORT': os.getenv('PGPORT'),
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.getenv('POSTGRES_DB'),
+#         'USER': os.getenv('POSTGRES_USER'),
+#         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+#         'HOST': os.getenv('PGHOST'),
+#         'PORT': os.getenv('PGPORT'),
+#     }
+# }
 
-POSTGRES_LOCALLY = False
+POSTGRES_LOCALLY = False 
 
 if ENVIRONMENT == "production" or POSTGRES_LOCALLY == True: 
     DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('POSTGRES_DATABASE_URL'), conn_max_age=1800)
+    'default': {**dj_database_url.config(ssl_require=True, conn_max_age=1800)} 
     }
 
 
