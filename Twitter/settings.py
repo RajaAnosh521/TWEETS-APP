@@ -21,7 +21,7 @@ import os
 # Load environment variables from .env file
 load_dotenv()
 
-# # Debug: Print the environment variables to confirm
+# print("Testing database connection with:")
 # print(f"POSTGRES_USER: {os.getenv('POSTGRES_USER')}")
 # print(f"POSTGRES_PASSWORD: {os.getenv('POSTGRES_PASSWORD')}")
 # print(f"POSTGRES_HOST: {os.getenv('POSTGRES_HOST')}")
