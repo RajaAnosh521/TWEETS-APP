@@ -1,1 +1,1 @@
-web: gunicorn Twitter.wsgi:application --workers 3 --bind 0.0.0.0:8080
+gunicorn Twitter.wsgi:application --bind 0.0.0.0:8080 --env ENVIRONMENT=production
